@@ -172,21 +172,21 @@ ProblemImpl::~ProblemImpl() {
 const ResidualBlock* ProblemImpl::AddResidualBlock(
     CostFunction* cost_function,
     LossFunction* loss_function,
-    const vector<double*>& parameter_blocks) {
+    const vector<double*>& parameter_blocks) {//传进来的参数块（注意是参数块，不是参数）的地址放在vector<double*>里面，两个参数块则vector里面有两个
   CHECK_NOTNULL(cost_function);
   CHECK_EQ(parameter_blocks.size(),
-           cost_function->parameter_block_sizes().size());
+           cost_function->parameter_block_sizes().size());//检查传进来的参数块和预先定义对否一样，比如我们定义的是两个
 
   // Check the sizes match.
   const vector<int16>& parameter_block_sizes =
-      cost_function->parameter_block_sizes();
+      cost_function->parameter_block_sizes();//比如定义的参数块是2个，里面分别有 7 3个参数，parameter_block_sizes里面放的是7 3
   CHECK_EQ(parameter_block_sizes.size(), parameter_blocks.size())
       << "Number of blocks input is different than the number of blocks "
       << "that the cost function expects.";
 
   // Check for duplicate parameter blocks.
   vector<double*> sorted_parameter_blocks(parameter_blocks);
-  sort(sorted_parameter_blocks.begin(), sorted_parameter_blocks.end());
+  sort(sorted_parameter_blocks.begin(), sorted_parameter_blocks.end());//按照地址给参数块排序
   vector<double*>::const_iterator duplicate_items =
       unique(sorted_parameter_blocks.begin(),
              sorted_parameter_blocks.end());
@@ -202,6 +202,7 @@ const ResidualBlock* ProblemImpl::AddResidualBlock(
   }
 
   // Add parameter blocks and convert the double*'s to parameter blocks.
+  //这里是把参数块里的数据取出来放到ceres自己定义的参数块里面去，对参数块做了检查
   vector<ParameterBlock*> parameter_block_ptrs(parameter_blocks.size());
   for (int i = 0; i < parameter_blocks.size(); ++i) {
     parameter_block_ptrs[i] =
