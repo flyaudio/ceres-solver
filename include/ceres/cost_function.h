@@ -77,7 +77,7 @@ class CostFunction {
   //
   // Outputs:
   //
-  // residuals is an array of size num_residuals_.
+  // residuals is an array of size num_residuals_.//是num_residuals_大小的数组
   //
   // jacobians is an array of size parameter_block_sizes_ containing
   // pointers to storage for jacobian blocks corresponding to each
